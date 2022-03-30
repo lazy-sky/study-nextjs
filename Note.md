@@ -29,3 +29,21 @@ const router = useRouter()
 ```
 
 https://nextjs.org/docs/api-reference/next/router#userouter
+
+## Style
+
+### CSS Modules
+
+CSS Module 사용하기
+
+```js
+className={`
+  ${styles.link} 
+  ${router.pathname === "/" ? styles.active : ""}
+`}
+
+className={[
+  styles.link,
+  pathname === "/about" ? styles.active : "",
+].join(" ")}
+```
