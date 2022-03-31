@@ -47,3 +47,15 @@ className={[
   pathname === "/about" ? styles.active : "",
 ].join(" ")}
 ```
+
+### styled-jsx
+
+많은 사람들이 사용해 온 탓인지 Next.js에는 styled-jsx가 내장되어 있다.
+styled-jsx는 css가 적용된 컴포넌트에만 영향을 미치는, 즉 스코핑된 css를 제공하는 라이브러리다.
+
+문법 e.g.,
+```html
+<style jsx>{`
+  CSS 스타일
+`}</style>
+```
