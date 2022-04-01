@@ -235,3 +235,33 @@ https://nextjs.org/docs/api-reference/next.config.js/redirects
   - 이와 달리 `redirects`는 새 페이지로 reroute되고 URL 변경 사항을 표시한다.
 
 https://nextjs.org/docs/api-reference/next.config.js/rewrites
+
+## SSR
+
+### `getServerSideProps`
+
+page에서 SSR 함수인 `getServerSideProps` 함수를 `export`하는 경우 Next.js는 `getServerSideProps`에서 반환된 데이터를 사용하여 각 요청에서 이 페이지를 pre-render 한다. `getServerSideProps`는 서버 측에서만 실행되며 브라우저에서는 실행되지 않는다.
+
+다음 예는 요청시 데이터를 fetch하고 결과를 pre-render하는 방법을 보여준다.
+
+```js
+export default function Page({ data }) {
+  // Render data...
+}
+
+// 매 요청마다 실행된다.
+export async function getServerSideProps() {
+  // 외부 API로부터 데이터 fetch
+  const res = await fetch(`https://.../data`)
+  const data = await res.json()
+
+  // props를 통해 page에 data전달
+  return { props: { data } }
+}
+```
+
+https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
+
+### `getServerSideProps` with Typesciprt
+
+https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props#getserversideprops-with-typescript

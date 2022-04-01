@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import SEO from "../components/SEO";
 
-export default function Home() {
+export default function Home({ results }) {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -18,7 +18,6 @@ export default function Home() {
   return (
     <div className="container">
       <SEO title="Home" />
-      {!movies && <h4>Loading...</h4>}
       {movies?.map((movie) => (
         <div className="movie" key={movie.id}>
           <div className="movie-poster">
@@ -59,4 +58,16 @@ export default function Home() {
       `}</style>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const { results } = await (
+    await fetch("http://localhost:3000/api/movies")
+  ).json();
+
+  return {
+    props: {
+      results,
+    },
+  };
 }
