@@ -101,3 +101,100 @@ https://nextjs.org/docs/basic-features/typescript#custom-app
 (글로벌 css간의 충돌을 피하기 위해서이다.)
 
 https://nextjs.org/docs/messages/css-global
+
+## Layouts
+
+잘 만들어진 컴포넌트는 여러 페이지에서 재사용될 수 있다. 예를 들어 모든 페이지에 동일한 navigation과 footer가 있을 수 있다.
+
+```js
+import Navbar from './navbar'
+import Footer from './footer'
+
+export default function Layout({ children }) {
+  return (
+    <>
+      <Navbar />
+      <main>{children}</main>
+      <Footer />
+    </>
+  )
+}
+```
+
+앱 전체에 하나의 레이아웃만 존재한다면, 커스텀 App을 만들고 레이아웃으로 감쌀 수 있다.
+
+```js
+// pages/_app.js
+
+import Layout from '../components/layout'
+
+export default function App({ Component, pageProps }) {
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  )
+}
+```
+
+레이아웃이 여러 개라면, `getLayout` 프로퍼티를 추가하여 페이지 단위로 레이아웃을 정의할 수 있다. 중첩 레이아웃도 가능하다.
+
+```js
+// pages/index.js
+
+import Layout from '../components/layout'
+import NestedLayout from '../components/nested-layout'
+
+export default function Page() {
+  return {
+    /** Your content */
+  }
+}
+
+Page.getLayout = function getLayout(page) {
+  return (
+    <Layout>
+      <NestedLayout>{page}</NestedLayout>
+    </Layout>
+  )
+}
+
+// pages/_app.js
+
+export default function App({ Component, pageProps }) {
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout || ((page) => page)
+
+  return getLayout(<Component {...pageProps} />)
+}
+```
+
+https://nextjs.org/docs/basic-features/layouts
+
+### Head (next/head)
+
+페이지에 `head` 엘리먼트를 추가하기 위해 내장 컴포넌트 `Head`를 이용할 수 있다.
+
+`head`에 태그가 중복되지 않도록 하기 위해 태그가 한 번만 렌더링되도록 하는 `key` 속성을 사용할 수 있다.
+아래 코드에서 두 번째 `meta property="og:title"`만 렌더링됩니다. 중복 `key` 속성이 있는 메타 태그는 자동으로 처리됩니다.
+
+```js
+import Head from 'next/head'
+
+export default function IndexPage() {
+  return (
+    <div>
+      <Head>
+        <title>My page title</title>
+        <meta property="og:title" content="My page title" key="title" />
+      </Head>
+      <Head>
+        <meta property="og:title" content="My new title" key="title" />
+      </Head>
+      <p>Hello world!</p>
+    </div>
+  )
+}
+```
+
+https://nextjs.org/docs/api-reference/next/head
