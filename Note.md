@@ -198,3 +198,40 @@ export default function IndexPage() {
 ```
 
 https://nextjs.org/docs/api-reference/next/head
+
+## next.config.js
+
+### Redirects
+`next.config.js`에서 `redirects`를 사용하면 들어오는 요청 경로를 다른 경로로 리다이렉트할 수 있다. 
+
+`redirects`는 `source`, `destination`, `permanent` 속성이 있는 객체를 포함하는 배열을 반환하는 비동기 함수다.
+
+- `source`: 들어오는 요청 경로 패턴
+- `destination`: 라우팅하려는 경로 (리다이렉트할 경로)
+- `permanent`: 
+  - `true`인 경우 클라이언트와 검색 엔진에 리디렉션을 영구히 캐싱하도록 하는 308 status code를 사용하고, 
+  - `false`인 경우 임시로 캐싱되지 않은 307 status code를 사용한다.
+
+```js
+module.exports = {
+  async redirects() {
+    return [
+      {
+        source: '/old-blog/:path*',
+        destination: '/blog/:path*',
+        permanent: false
+      },
+    ]
+  },
+}
+```
+
+https://nextjs.org/docs/api-reference/next.config.js/redirects
+
+### Rewrites (URL변경되지 않음)
+`next.config.js`에서 `rewrites`를 사용하면 들어오는 요청 경로를 다른 경로에 매핑할 수 있습니다.
+
+`rewrites`는 URL 프록시 역할을 하고 `destination` 경로를 마스킹하여 사용자가 사이트에서 위치를 변경하지 않은 것처럼 보이게 한다. 
+  - 이와 달리 `redirects`는 새 페이지로 reroute되고 URL 변경 사항을 표시한다.
+
+https://nextjs.org/docs/api-reference/next.config.js/rewrites
