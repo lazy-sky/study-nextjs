@@ -22,7 +22,7 @@ export default function Home({ results }) {
         <div className="movie" key={movie.id}>
           <div className="movie-poster">
             <Image
-              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.original_title}
               width="100%"
               height="100%"
@@ -39,6 +39,10 @@ export default function Home({ results }) {
           grid-template-columns: 1fr 1fr;
           padding: 20px;
           gap: 20px;
+        }
+
+        .movie {
+          cursor: pointer;
         }
 
         .movie .movie-poster {
