@@ -1,28 +1,16 @@
-import { useState, useEffect } from "react";
-
 import Image from "next/image";
 
 import SEO from "../components/SEO";
 
 export default function Home({ results }) {
-  const [movies, setMovies] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      const { results } = await (await fetch(`/api/movies`)).json();
-
-      setMovies(results);
-    })();
-  }, []);
-
   return (
     <div className="container">
       <SEO title="Home" />
-      {movies?.map((movie) => (
+      {results?.map((movie) => (
         <div className="movie" key={movie.id}>
           <div className="movie-poster">
             <Image
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              src={`http://image.tmdb.org/t/p/w500${movie.poster_path}`}
               alt={movie.original_title}
               width="100%"
               height="100%"
