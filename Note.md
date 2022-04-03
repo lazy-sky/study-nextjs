@@ -287,3 +287,43 @@ https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props#getser
 `getServerSideProps` 내부에서 오류가 발생하면 `pages/500.js` 파일이 표시된다.
 
 500 page(서버 렌더링 오류 페이지)는 사용자가 커스터마이징 할 수 있다. 개발 중에는 이 파일이 사용되지 않고 대신 개발 오버레이가 표시된다.
+
+## Dynamic Routes
+
+Next.js에서는 `pages` 폴더에 `[param].js`와 같은 작명의 파일을 추가하여 Dynamic Route를 생성할 수 있다.
+
+`/movies/1`, `/movies/abc` 등과 같은 모든 경로는 `pages/movies/[id].js`와 일치한다.
+
+```js
+const router = useRouter()
+const { id } = router.query
+```
+
+`pages/movies/index.js`는 경로 `/movies`에 대응된다.
+
+https://nextjs.org/docs/routing/dynamic-routes
+
+### Catch all routes
+
+대괄호 안에 세 개의 점(`...`)을 추가하여 모든 경로를 포착하도록 Dynamic Routes를 확장할 수 있다. 
+
+`pages/movies/[...id].js`는 `/movies/1`은 물론 `/movies/1/2`, `/movies/1/ab/cd` 등과도 일치한다. 
+일치하는 매개변수는 페이지에 쿼리 매개변수로 전송되며 항상 배열이므로 /movies/a 경로에는 다음 쿼리 객체가 있다.
+
+e.g., `{ "id": ["a"] }`
+
+### Optional catch all routes
+
+대괄호를 두 번 사용하는 것으로 옵셔널 catch all routes를 만들수 있다. (e.g., `[[...id]]`)
+
+일반 catch all과의 가장 핵심적인 차이는 옵셔널에서는 파라미터가 없는 라우트도 매칭된다는 것이다.
+
+### 주의사항(매칭 경로 우선순위)
+
+- 사전에 정의된 경로는 동적 경로보다 우선하며, 동적 경로는 catch all 경로에 우선한다.
+
+  e.g.,
+  - `pages/post/create.js`는 경로 `/post/create`와 매칭된다.
+  - `pages/post/[id].js`는 `/post/1`, `/post/abc`등과는 매칭되지만 `/post/create`와는 매칭되지 않는다.
+  - `pages/post/[...id].js`는 `/post/1/2`, `/post/a/b/c`, 등과는 매칭되지만 `/post/create`, `/post/abc`등과는 매칭되지 않는다.
+  
