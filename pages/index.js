@@ -1,25 +1,49 @@
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import SEO from "../components/SEO";
 
 export default function Home({ results }) {
+  const router = useRouter();
+
+  const handleClickMovie = (id, title) => {
+    router.push(
+      {
+        pathname: `/movies/${id}`,
+        query: {
+          title,
+        },
+      },
+      // url 마스킹
+      `/movies/${id}`
+    );
+  };
+
   return (
     <div className="container">
       <SEO title="Home" />
       {results?.map((movie) => (
-        <div className="movie" key={movie.id}>
-          <div className="movie-poster">
-            <Image
-              src={`http://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.original_title}
-              width="100%"
-              height="100%"
-              layout="responsive"
-              objectFit="contain"
-            />
-          </div>
-          <h4>{movie.original_title}</h4>
-        </div>
+        <Link href={`/movies/${movie.id}`} key={movie.id}>
+          <a>
+            <div
+              className="movie"
+              onClick={() => handleClickMovie(movie.id, movie.original_title)}
+            >
+              <div className="movie-poster">
+                <Image
+                  src={`http://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.original_title}
+                  width="100%"
+                  height="100%"
+                  layout="responsive"
+                  objectFit="contain"
+                />
+              </div>
+              <h4>{movie.original_title}</h4>
+            </div>
+          </a>
+        </Link>
       ))}
       <style jsx>{`
         .container {

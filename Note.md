@@ -18,6 +18,16 @@
 
 https://nextjs.org/docs/messages/no-html-link-for-pages
 
+### a tag in Link
+
+`Link` 컴포넌트 안에 `a` 태그를 넣는 이유: NextJS에서 권장하는 사용방식이다. `a` 태그를 넣지 않고, 문자열을 넣어도 아래와 같이 자동으로 NextJS가 해당 문자열을 `a` 태그로 다시 감싸주지만 그래도 NextJS에서는 `Link` 컴포넌트 안에 `a` 태그를 넣어서 사용할 것을 권장하는 것 같다. 그 이유는 `Link` 컴포넌트는 순수 html태그가 아니기 때문에 리액트 없이는 사용할 수 없지만 `a` 태그는 자바스크립트를 활성화하지 않아도 작동하기 때문에 SEO에 더 유리하기 떄문이다.
+
+```js
+if (typeof children === 'string') {
+  children = <a>{children}</a>
+}
+```
+
 ### `useRouter`
 
 앱의 함수 컴포넌트에서 router 객체 내부에 접근하려면 `userRouter` 훅을 사용할 수 있다.
@@ -326,4 +336,27 @@ e.g., `{ "id": ["a"] }`
   - `pages/post/create.js`는 경로 `/post/create`와 매칭된다.
   - `pages/post/[id].js`는 `/post/1`, `/post/abc`등과는 매칭되지만 `/post/create`와는 매칭되지 않는다.
   - `pages/post/[...id].js`는 `/post/1/2`, `/post/a/b/c`, 등과는 매칭되지만 `/post/create`, `/post/abc`등과는 매칭되지 않는다.
-  
+
+## Router
+
+### router.push
+
+클라이언트에서의 전환을 처리한다. `next/link`로 충분하지 않을 때 유용하다.
+
+`router.push(url, as, options)`
+
+- `url`: `UrlObject | String`: 탐색할 URL
+- `as`: `UrlObject | String`: 브라우저 URL 표시줄에 표시될 경로에 대한 옵셔널 데코레이터
+- `options`: 옵셔널 설정 객체 (`scroll`, `shallow`, `getStaticProps`, `getServerSideProps` `getInitialProps`, `locale`)
+
+```js
+router.push({
+  pathname: '/post/[pid]',
+  query: { pid: post.id },
+})
+```
+
+한편 외부 URL에 대해서는 `router.push()`를 사용할 필요가 없다.
+`window.location`을 사용하는 것이 더 적합하다.
+
+https://nextjs.org/docs/api-reference/next/router#routerpush
