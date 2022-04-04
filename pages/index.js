@@ -8,23 +8,17 @@ export default function Home({ results }) {
   const router = useRouter();
 
   const handleClickMovie = (id, title) => {
-    router.push(
-      {
-        pathname: `/movies/${id}`,
-        query: {
-          title,
-        },
-      },
-      // url 마스킹
-      `/movies/${id}`
-    );
+    router.push(`/movies//${title}/${id}`);
   };
 
   return (
     <div className="container">
       <SEO title="Home" />
       {results?.map((movie) => (
-        <Link href={`/movies/${movie.id}`} key={movie.id}>
+        <Link
+          href={`/movies/${movie.original_title}/${movie.id}`}
+          key={movie.id}
+        >
           <a>
             <div
               className="movie"

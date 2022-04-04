@@ -274,7 +274,32 @@ https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props
 
 ### `getServerSideProps` with Typesciprt
 
+```ts
+import { GetServerSideProps } from 'next'
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+// ...
+}
+
+function Page({ data }: InferGetServerSidePropsType< typeof getServerSideProps>)
+```
+
+```ts
+type MovieDetailParams = [string, string] | [];
+
+const router: NextRouter = useRouter();
+const [title, id] = (router.query.params || []) as MovieDetailParams;
+```
+
 https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props#getserversideprops-with-typescript
+
+### `getServerSideProps` (Context parameter)
+
+- `params`: 이 페이지에서 동적 경로를 사용하는 경우 `params`에 route parameter가 포함된다. 
+  - e.g., 페이지 이름이 `[id].js`이면 `params`는 `{ id: ... }`
+- `query`: 쿼리 문자열을 나타내는 객체
+
+https://nextjs.org/docs/api-reference/data-fetching/get-server-side-props#context-parameter
 
 ### 언제 `getServerSideProps`를 사용해야 하는가
 
