@@ -50,3 +50,11 @@ Next.js는 빌드 시간이 아니라, 온디맨드(유저 요청 시간에)로 
     - Cumulative Layout Shift(누적 레이아웃 시프트, CLS): 시각적 안정성을 측정. 페이지에서 0.1 이하의 CLS를 유지하면 우수.
 
 아래는 `next/image`를 사용하여 프로필 사진을 보여주는 예시이다. `height`, `width`를 원하는 렌더링 사이즈로 작성하고, 가로 세로 비율은 원본 이미지와 동일해야 한다.
+
+## Metadata
+
+페이지의 메타데이터를 수정하고 싶다면 `next/head` 모듈의 `Head` 컴포넌트를 사용하면 된다. 
+- [`next/head`](https://nextjs.org/docs/api-reference/next/head)
+
+`html` 태그를 커스터마이징하고 싶다면 `pages/_document.js` 파일을 만들면 된다.
+- [`Documnemt`](https://nextjs.org/docs/advanced-features/custom-document)
