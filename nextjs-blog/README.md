@@ -113,4 +113,21 @@ Next.js에서는 빌트인 라이브러리인 styled-jsx를 비롯하여 styled-
     )
   }
   ```
-  
+
+### Customizing PostCSS Config
+
+Next.js는 별도의 구성없이 PostCSS를 이용해 CSS를 컴파일할 수 있다.
+
+PostCSS 설정 커스터마이징을 위해 루트 폴더에 `postcss.config.js`를 생성한다. 이는 Tailwind와 같은 라이브러리 이용에 유용하다.
+(`npm install -D tailwindcss autoprefixer postcss`)
+- [Customizing PostCSS Config](https://nextjs.org/docs/advanced-features/customizing-postcss-config)
+
+한편 `tailwind.config.js`를 생성해 `content` 옵션을 명시하는 것이 권장된다.
+- [configuring content sources](https://tailwindcss.com/docs/content-configuration)
+- [Next.js + Tailwind example](https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss)
+
+### Using Sass 
+
+Next.js를 사용하면 `.sass`, `.scss`는 물론 컴포넌트 레벨의 `.module.scss`도 사용 가능하다. 
+
+빌트인 지원 기능을 사용하기 전에 sass를 설치하자. `npm install -D sass`
