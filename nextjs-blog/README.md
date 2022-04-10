@@ -58,3 +58,16 @@ Next.js는 빌드 시간이 아니라, 온디맨드(유저 요청 시간에)로 
 
 `html` 태그를 커스터마이징하고 싶다면 `pages/_document.js` 파일을 만들면 된다.
 - [`Documnemt`](https://nextjs.org/docs/advanced-features/custom-document)
+
+## Third-Party Javascript
+
+일반적인 `script` 태그를 이용해 불러온 써드파티 자바스크립트 코드는 언제 로딩되는지가 불분명하다. 또한 특정 스크립트가 렌더링을 막고 페이지 콘텐츠 로딩을 지연시킬 수 있는 경우엔 성능을 크게 떨어뜨릴 수 있다.
+
+### Using the Script Component
+
+`next/script`는 `script` 태그의 확장판이다. 스크립트를 불러오거나 실행시키는 걸 최적화한다.
+
+`Script` 컴포넌트에는 몇 가지 추가 속성이 있다.
+- `strategy`: 써드파티 스크립트가 로드되는 시기를 제어한다.
+  - 값 `lazyOnload`는 브라우저가 유휴 시간 동안 스크립트를 레이지하게 로드하도록 한다.
+- `onLoad`: 스크립트가 로드된 후 즉시 자바스크립트 코드를 실행하는데 사용된다. 예시(`pages/posts/first-post.js`)에선 스크립트가 올바르게 로드되었음을 알리는 메시지를 띄운다.
