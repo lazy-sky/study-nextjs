@@ -71,3 +71,15 @@ Next.js는 빌드 시간이 아니라, 온디맨드(유저 요청 시간에)로 
 - `strategy`: 써드파티 스크립트가 로드되는 시기를 제어한다.
   - 값 `lazyOnload`는 브라우저가 유휴 시간 동안 스크립트를 레이지하게 로드하도록 한다.
 - `onLoad`: 스크립트가 로드된 후 즉시 자바스크립트 코드를 실행하는데 사용된다. 예시(`pages/posts/first-post.js`)에선 스크립트가 올바르게 로드되었음을 알리는 메시지를 띄운다.
+
+## CSS Styling
+
+Next.js에서는 빌트인 라이브러리인 styled-jsx를 비롯하여 styled-componenets, emotion 등의 CSS in JS 라이브러리를 사용할 수 있다.
+
+`.css`, `.scss` 파일을 `import` 하는 방식으로도 스타일링을 할 수 있다. Tailwind와 같은 라이브러리도 이용할 수 있다.
+
+## Layout Component
+
+### Adding CSS
+
+`.module.css`와 같은 파일 작명으로 CSS Modules를 사용할 수 있다.
