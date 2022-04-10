@@ -89,3 +89,28 @@ Next.js에서는 빌트인 라이브러리인 styled-jsx를 비롯하여 styled-
 어떤 CSS 파일이 모든 페이지 적용되도록 하려면 `page/_app.js`를 작성해야 한다.
 
 이 안에서 작성된 `App` 컴포넌트는 모든 페이지에 공통적으로 사용되는 최상위 컴포넌트다. global한 스타일을 적용하는 것 외에도 페이지를 이동하는 동안에도 상태를 유지시키는 등 최상위 컴포넌트를 이용할 수 있다.
+
+## Styling Tips
+
+### Using `classnames` libarary to toggle classes
+
+`classnames`는 클래스명을 쉽게 전환할 수 있는 간단한 라이브러리다. (`npm i classnames`) 간단한 사용법은 다음과 같다.
+- 예를 들어, `type` 값으로 `success` 혹은 `error`를 갖는 알림창(`Alert`)을 만들 때,
+  ```js
+  import styles from './alert.module.css'
+  import cn from 'classnames'
+
+  export default function Alert({ children, type }) {
+    return (
+      <div
+        className={cn({
+          [styles.success]: type === 'success',
+          [styles.error]: type === 'error'
+        })}
+      >
+        {children}
+      </div>
+    )
+  }
+  ```
+  
