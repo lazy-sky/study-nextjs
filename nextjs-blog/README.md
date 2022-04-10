@@ -83,3 +83,9 @@ Next.js에서는 빌트인 라이브러리인 styled-jsx를 비롯하여 styled-
 ### Adding CSS
 
 `.module.css`와 같은 파일 작명으로 CSS Modules를 사용할 수 있다.
+
+## Global Styles
+
+어떤 CSS 파일이 모든 페이지 적용되도록 하려면 `page/_app.js`를 작성해야 한다.
+
+이 안에서 작성된 `App` 컴포넌트는 모든 페이지에 공통적으로 사용되는 최상위 컴포넌트다. global한 스타일을 적용하는 것 외에도 페이지를 이동하는 동안에도 상태를 유지시키는 등 최상위 컴포넌트를 이용할 수 있다.
