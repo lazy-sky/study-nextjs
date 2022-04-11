@@ -164,6 +164,7 @@ Next.js를 이용하여 각 페이지마다 원하는 사전 렌더링 방식을
 ### Static Generation with Data using `getStaticProps`
 
 페이지 컴포넌트를 `export`하면서 동시에 비동기 함수 `getStaticProps`를 `export` 하는 것으로 가능하다.
+- [getStaticProps](https://nextjs.org/docs/basic-features/data-fetching/get-static-props)
 
 `getStaticProps`는 빌드 시간에 실행된다. 함수 안에서 외부 데이터를 불러오고 그 데이터를 페이지에 `props`로 전달할 수 있다.
 
@@ -182,3 +183,13 @@ export async function getStaticProps() {
   }
 }
 ```
+
+## getStaticProps Details
+
+`getStaticProps`를 이용해 `lib/posts.js`에서 내부 파일 시스템을 이용해서 데이터를 불러오는 것 이외에도 API 등을 이용하여 외부 데이터를 불러오거나 데이터베이스에 직접 쿼리하는 것도 가능하다. 왜냐하면 `getStaticProps`는 서버 측에서만 실행되기 때문이다. 클라이언트 측에서는 절대로 실행되지 않는다.
+
+개발 모드에선 매 요청(`npm run dev`)마다 `getStaticProps`가 실행된다. 배포 모드에선 빌드 시간에 실행된다.
+
+`getStaticProps`는 `page` 내에서만 사용할 수 있다. 다른 컴포넌트 파일에선 `export` 할 수 없다. 
+
+만약 요청 시에 데이터를 불러와야 한다면 Static Generation은 좋은 옵션이 아니다. 이 경우엔 Server-side Rendering을 채택하거나 사전 렌더링을 건너 뛰어야 한다.
