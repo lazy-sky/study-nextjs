@@ -193,3 +193,29 @@ export async function getStaticProps() {
 `getStaticProps`는 `page` 내에서만 사용할 수 있다. 다른 컴포넌트 파일에선 `export` 할 수 없다. 
 
 만약 요청 시에 데이터를 불러와야 한다면 Static Generation은 좋은 옵션이 아니다. 이 경우엔 Server-side Rendering을 채택하거나 사전 렌더링을 건너 뛰어야 한다.
+
+## Fetching Data at Request Time
+
+서버 사이드 렌더링을 하기 위해선 `getStaticProps` 대신에 `getServerSideProps`를 `export`해야 한다.
+
+```js
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      // props for your component
+    }
+  }
+}
+```
+
+`getServerSideProps`는 요청 시간에 호출되기 때문에 이 함수의 파라미터 `context`에는 요청과 관련된 파라미터들이 포함되어 있다. 
+
+`getServerSideProps`는 요청 시간에 불러와야 하는 데이터를 가진 페이지를 사전 렌더링할 때만 사용해야 한다. 왜냐하면 서버가 모든 요청에 대해 결과를 계산해야 하고 추가 설정없이는 CDN에 의해 결과를 캐시할 수 없기 때문에 `getStaticProps`보다 TTFB(Time to first byte)가 느리기 때문이다.
+
+만약 사전 렌더링을 할 필요가 없다면 Client-side Rendering을 고려할 수 있다.
+- [Client side](https://nextjs.org/docs/basic-features/data-fetching/client-side)
+
+먼저 외부 데이터가 필요 없는 페이지 부분을 정적으로 생성(사전 렌더링)한다. 그리고 페이지가 로드되면 자바스크립트를 사용하여 클라이언트에서 외부 데이터를 가져오고 나머지 부분을 채우는 식이다. 이러한 방식은 유저 대시보드 페이지 구현 등에 유용하다. (왜냐하면 대시보드는 사용자별 전용 페이지이므로 SEO와는 관련이 없으며 페이지를 미리 렌더링할 필요가 없기 때문이다. 그리고 데이터가 자주 업데이트되므로 요청 시 데이터를 가져와야 한다.)
+
+클라이언트 측에서 데이터를 가져오는 경우 SWR을 이용할 수 있다. SWR은 caching, revalidation, focus tracking, refetching on interval 등을 다룬다.
+- [SWR](https://swr.vercel.app/ko)
