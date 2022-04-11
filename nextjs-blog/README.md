@@ -387,3 +387,9 @@ export default function handler(req, res) {
 `getStaticProps`, `getStaticPaths`에서 API 경로를 가져오면 안된다. 대신 `getStaticProps`, `getStaticPaths`(또는 helper 함수 호출)에 [서버 사이드 코드를 직접 작성](https://nextjs.org/docs/basic-features/data-fetching/get-static-props#write-server-side-code-directly)해야 한다.
 
 왜냐하면 `getStaticProps`, `getStaticPaths`는 서버 측에서만 실행되며 클라이언트 측에서는 실행되지 않기 때문이다. 또한 이러한 함수들은 브라우저의 자바스크립트 번들에 포함되지 않는다. 즉, 직접 데이터베이스 쿼리와 같은 코드를 브라우저로 보내지 않고도 작성할 수 있다. 
+
+# Typescript
+
+배포 겸 레포지토리 변경
+- [Next.js with Typescript](https://nextjs.org/learn/excel/typescript/setup)
+- https://github.com/lazy-sky/nextjs-blog
