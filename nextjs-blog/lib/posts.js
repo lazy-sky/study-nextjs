@@ -31,3 +31,28 @@ export function getSortedPostsData() {
     return 0;
   });
 }
+
+export function getAllPostIds() {
+  const fileNames = fs.readdirSync(postsDirectory);
+
+  // 파일 이름에 [id]를 사용하기 때문에 반드시 각 객체에는 params 키가 있고 id 키가 있는 객체가 포함되어야 한다.
+  return fileNames.map((fileName) => ({
+    params: {
+      id: fileName.replace(/\.md$/, ""),
+    },
+  }));
+}
+
+export function getPostData(id) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+
+  // Use gray-matter to parse the post metadata section
+  const matterResult = matter(fileContents);
+
+  // Combine the data with the id
+  return {
+    id,
+    ...matterResult.data,
+  };
+}

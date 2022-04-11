@@ -219,3 +219,122 @@ export async function getServerSideProps(context) {
 
 클라이언트 측에서 데이터를 가져오는 경우 SWR을 이용할 수 있다. SWR은 caching, revalidation, focus tracking, refetching on interval 등을 다룬다.
 - [SWR](https://swr.vercel.app/ko)
+
+# Dynamic Routes
+
+## Page Path Depends on External Data
+
+### Overview
+
+`pages/posts` 폴더 안에 `[id].js` 파일을 만들고, 다른 페이지 파일처럼 코드를 작성한다.
+
+그리고 이 페이지에서 비동기 함수 `getStaticPaths`를 `export`한다. 이 함수는 파일명의 `id`가 될 수 있는 값들의 리스트를 리턴해야 한다.
+
+마지막으로 `getStaticProps`를 다시 구현한다. 주어진 `id`로 필요한 데이터를 가져온다. `getStaticProps`에는 `id`가 포함된 파라미터가 주어진다.
+
+```js
+import Layout from '../../components/layout'
+
+export default function Post() {
+  return <Layout>...</Layout>
+}
+
+export async function getStaticPaths() {
+  // Return a list of possible value for id
+}
+
+export async function getStaticProps({ params }) {
+  // Fetch necessary data for the blog post using params.id
+}
+```
+
+## Implement getStaticPaths
+
+- [getStaticPaths](https://nextjs.org/docs/basic-features/data-fetching/get-static-paths)
+- [getStaticPaths API reference](https://nextjs.org/docs/api-reference/data-fetching/get-static-paths)
+
+동적 경로를 갖고 있고 `getStaticProps`를 사용하는 페이지는 정적으로 생성돼야 하는 경로의 리스틀 정의해줘야 한다.
+
+동적 영로를 사용하는 페이지에서 `getStaticPaths`를 `export`하면 Next.js는 `getStaticPaths`에 의해 명시된 모든 경로를 정적으로 사전 렌더링한다.
+
+`getstaticPaths`는 반드시 `getStaticProps`와 함께 쓰여야 한다. `getServerSideProps`와는 함께 사용할 수 없다.
+
+```js
+export async function getStaticPaths() {
+  return {
+    paths: [
+      { params: { ... } }
+    ],
+    fallback: true // false or 'blocking'
+  };
+}
+```
+
+`getStaticPaths`가 반환하는 값들
+- `paths`: 사전 렌더링될 경로들
+- `fallback`
+  - `false`: `getStaticPaths`에서 리턴하지 않는 경로는 404 페이지로 처리한다.
+  - `true`
+    - 마찬가지로 `getStaticPaths`가 리턴하는 경로를 빌드 시간에 사전 렌더링한다.
+    - 리턴하지 않는 경로를 404 페이지로 처리하지 않는 대신 Next.js가 제공하는 fallback 페이지로 처리한다.
+    - 완료되면 브라우저는 생성된 경로에 대한 JSON을 받는다. 이는 필요한 props로 페이지를 자동으로 렌더링하는데 필요하다. 유저 관점에서 볼 때 페이지는 fallback 페이지에서 전체 페이지로 변경된다. 이와 동시에 Next.js는 이 경로를 사전 렌더링될 리스트에 추가한다.
+    - `true` 옵션은 데이터에 의존하는 정적 페이지 수가 매우 많은 경우에 유용하다. 이를테면 큰 규모의 이커머스 사이트 경우에 모든 제품 페이지를 미리 렌더링하려면 빌드 시간이 매우 오래 걸릴 것이다. 그 대신 작은 페이지 부분 집합을 정적으로 생성하고 나머지 부분에는 `true` 옵션을 적용해두면 유저는 아직 생성되지 않는 페이지를 요청할 때 로딩 표시와 스켈레톤 컴포넌트(fallback 페이지)를 볼 수 있다. 이후 `getStaticProps`가 완료되면 요청된 데이터로 페이지가 렌더링된다. 이제부터 동일한 페이지를 요청하는 모든 사용자는 사전 렌더링된 페이지를 볼 수 있다. 이를 통해 빠른 UX와 빠른 빌드를 동시에 챙길 수 있다. 
+    - 한편 `true`는 생성된 페이지들을 갱신하지 않는다. 이를 위해선 [ISR](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)이 필요하다.
+  - `'block'`: `getStaticPaths`가 리턴하지 않는 경로에 대해 HTML이 생성되는 것을 기다린다. (SSR과 동일) 그리고 미래에 있을 요청을 위해 캐싱된다. 그래서 이는 각 경로마다 한 번만 발생한다.
+ - Fallback pages
+  - 대체 버전의 페이지다.
+  - 라우터를 사용하여 fallback이 렌더링되는지 탐지할 수 있다. (`router.isFallback` will be `true`).
+  - e.g.,
+    ```js
+    // pages/posts/[id].js
+    import { useRouter } from 'next/router'
+
+    function Post({ post }) {
+      const router = useRouter()
+
+      // If the page is not yet generated, this will be displayed
+      // initially until getStaticProps() finishes running
+      if (router.isFallback) {
+        return <div>Loading...</div>
+      }
+
+      // Render post...
+    }
+
+    // This function gets called at build time
+    export async function getStaticPaths() {
+      return {
+        // Only `/posts/1` and `/posts/2` are generated at build time
+        paths: [{ params: { id: '1' } }, { params: { id: '2' } }],
+        // Enable statically generating additional pages
+        // For example: `/posts/3`
+        fallback: true,
+      }
+    }
+
+    // This also gets called at build time
+    export async function getStaticProps({ params }) {
+      // params contains the post `id`.
+      // If the route is like /posts/1, then params.id is 1
+      const res = await fetch(`https://.../posts/${params.id}`)
+      const post = await res.json()
+
+      // Pass post data to the page via props
+      return {
+        props: { post },
+        // Re-generate the post at most once per second
+        // if a request comes in
+        revalidate: 1,
+      }
+    }
+
+    export default Post
+    ```
+
+`getstaticPaths`를 써야하는 경우
+- 동적 경로와 함께 정적으로 사전 렌더링해야 할 때
+- 데이터가 
+  - headless CMS에서 올 때
+  - 데이터베이스에서 올 때
+  - 파일시스템에서 올 때
+- SEO를 위해 페이지가 반드시 사전 렌더링되어야 하고 빨라야 할 때 
