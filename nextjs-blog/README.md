@@ -131,3 +131,54 @@ PostCSS 설정 커스터마이징을 위해 루트 폴더에 `postcss.config.js`
 Next.js를 사용하면 `.sass`, `.scss`는 물론 컴포넌트 레벨의 `.module.scss`도 사용 가능하다. 
 
 빌트인 지원 기능을 사용하기 전에 sass를 설치하자. `npm install -D sass`
+
+# Pre-rendering and Data Fetching
+
+## Pre-rendering
+
+기본적으로 Next.js는 모든 페이지를 사전 렌더링한다. 즉 클라이언트 사이드에서 작업하는 대신 모든 페이지에 대한 HTML 문서를 미리 만들어 놓는다는 것이다. 이러한 사전 렌더링은 성능과 검색 최적화에 유리하다. 
+
+생성된 각 HTML은 해당 페이지에 필요한 최소한의 자바스크립트 코드와 연결된다. 브라우저에 의해 페이지가 로드되면 자바스크립트 코드가 실행되어 페이지를 완전히 인터랙티브하게 만든다. (이 과정을 hydration이라 한다.) 순수한 리액트 앱에는 사전 렌더링이 없다. 
+
+## Two Forms of Pre-rendering
+
+사전 렌더링엔 두 가지 형태가 있다.
+- `Static Generation`은 빌드 시간에 HTML을 만드는 사전 렌더링 방법이다. 사전 생성된 HTML은 매 요청마다 재사용된다.
+- `Server-side Rendering`은 매 요청마다 HTML을 생성하는 사전 렌더링 방법이다.
+
+Next.js를 이용하여 각 페이지마다 원하는 사전 렌더링 방식을 선택할 수 있다. 둘을 혼합시킬 수도 있다. 대부분은 Static Generation으로 생성된다.
+
+### When to Use Static Generation vs. Server-side Rendering
+
+가능하다면 Static Generation이 권장된다. 왜냐하면 CDN에 의해 먼저 페이지가 빌드되고 이는 요청에 의한 렌더링방식보다 훨씬 빠르기 때문이다. 마케팅 페이지, 블로그 포스트, 이커머스 상품 리스트, 도움말 및 문서 등이 좋은 용례이다.
+
+유저가 요청하기 이전에 이 페이지를 사전에 렌더링할 수 있다면 Static Generation을 선택하는 것이 옳다.
+
+반면에 유저가 요청하기 전에 페이지를 사전에 렌더링할 수 없다면 서버사이드 렌더링을 선택하는 것이 옳다. 빈번하게 갱신되는 데이터를 담고 있거나 매 요청마다 페이지 콘텐츠가 자주 바뀌는 페이지가 이에 해당한다. 혹은 사전 렌더링을 하지 않고 클라이언트 측 자바스크립트를 사용하여 자주 업데이트되는 데이터를 처리할 수도 있다.
+
+## Static Generation with and without Data
+
+데이터가 없는 경우는 물론 HTML을 렌더링하기 위해 빌드 시간에 외부 API나 데이터베이스 등에 접근해야 하는 경우에도 Static Generation을 이용할 수 있다.
+- [Static Generation with data](https://nextjs.org/docs/basic-features/pages#static-generation-with-data)
+
+### Static Generation with Data using `getStaticProps`
+
+페이지 컴포넌트를 `export`하면서 동시에 비동기 함수 `getStaticProps`를 `export` 하는 것으로 가능하다.
+
+`getStaticProps`는 빌드 시간에 실행된다. 함수 안에서 외부 데이터를 불러오고 그 데이터를 페이지에 `props`로 전달할 수 있다.
+
+e.g.,
+```js
+export default function Home(props) { ... }
+
+export async function getStaticProps() {
+  // Get external data from the file system, API, DB, etc.
+  const data = ...
+
+  // The value of the `props` key will be
+  //  passed to the `Home` component
+  return {
+    props: ...
+  }
+}
+```
