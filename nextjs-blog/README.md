@@ -356,3 +356,34 @@ export async function getStaticPaths() {
 Next.js 라우터에 접근하려면 `next/router`에서 `useRouter` 훅을 `import` 하면 된다.
 
 커스텀 404 페이지를 만들고 싶다면 `pages/404.js` 파일을 생성하면 된다. 이 파일은 빌드 시간에 정적으로 생성된다. 이 밖에도 다양한 [에러 페이지](https://nextjs.org/docs/advanced-features/custom-error-page)를 커스텀할 수 있다.
+
+# API Routes
+
+[API Routes](https://nextjs.org/docs/api-routes/introduction)
+
+## Creating API Routes
+
+API Routes를 사용하면 앱 내에서 API 엔드포인트를 생성할 수 있다. `pages/api` 폴더 안에 아래와 같은 포맷의 함수를 작성한다.
+
+```js
+// req = HTTP incoming message, res = HTTP server response
+export default function handler(req, res) {
+  // ...
+}
+```
+
+e.g.,
+
+```js
+export default function handler(req, res) {
+  res.status(200).json({ text: 'Hello' })
+}
+```
+
+`localhost:3000/api/hello`에 접근하면 `{ "text" : "Hello" }`를 볼 수 있다.
+
+## API Routes Details
+
+`getStaticProps`, `getStaticPaths`에서 API 경로를 가져오면 안된다. 대신 `getStaticProps`, `getStaticPaths`(또는 helper 함수 호출)에 [서버 사이드 코드를 직접 작성](https://nextjs.org/docs/basic-features/data-fetching/get-static-props#write-server-side-code-directly)해야 한다.
+
+왜냐하면 `getStaticProps`, `getStaticPaths`는 서버 측에서만 실행되며 클라이언트 측에서는 실행되지 않기 때문이다. 또한 이러한 함수들은 브라우저의 자바스크립트 번들에 포함되지 않는다. 즉, 직접 데이터베이스 쿼리와 같은 코드를 브라우저로 보내지 않고도 작성할 수 있다. 
