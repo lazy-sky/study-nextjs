@@ -338,3 +338,21 @@ export async function getStaticPaths() {
   - 데이터베이스에서 올 때
   - 파일시스템에서 올 때
 - SEO를 위해 페이지가 반드시 사전 렌더링되어야 하고 빨라야 할 때 
+
+## Dynamic Routes Details
+
+[dynamic routes](https://nextjs.org/docs/routing/dynamic-routes)
+
+`getStaticProps`처럼 `getStaticPaths`도 외부로부터 데이터를 가져올 수 있다.
+
+개발 모드에선 매 요청(`npm run dev`)마다 `getStaticPaths`가 실행된다. 배포 모드에선 빌드 시간에 실행된다.
+
+`getStaticProps`는 `page` 내에서만 사용할 수 있다. 다른 컴포넌트 파일에선 `export` 할 수 없다. 
+
+`fallback: true`(or `'blocking'`)로 하여 `getStaticProps` 작동을 변경시킬 수 있다.
+
+`[...id].js`와 같이 파일을 작명하여 Catch-all 경로로 확장시킬 수 있다. 이 경우 `getStaticPaths`에서 `id` 키의 값으로 배열을 반환해야 한다.
+
+Next.js 라우터에 접근하려면 `next/router`에서 `useRouter` 훅을 `import` 하면 된다.
+
+커스텀 404 페이지를 만들고 싶다면 `pages/404.js` 파일을 생성하면 된다. 이 파일은 빌드 시간에 정적으로 생성된다. 이 밖에도 다양한 [에러 페이지](https://nextjs.org/docs/advanced-features/custom-error-page)를 커스텀할 수 있다.
