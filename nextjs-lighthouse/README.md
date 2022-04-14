@@ -59,3 +59,46 @@ React 컴포넌트를 동적 imports를 사용하여 가져올 수도 있다. �
 커스텀 폰트는 사이트의 브랜딩, 디자인 및 크로스 브라우저/디바이스 일관성을 위해 중요하다.
 
 Next.js에는 자동 웹 폰트 최적화가 내장되어 있다. 기본적으로 Next.js는 빌드 시 자동으로 폰트 CSS를 인라인화하여 폰트 선언을 가져오기 위한 추가 작업을 제거한다. 따라서 FCP(First Contentful Paint) 및 LCP(Large Contentful Paint)가 개선된다.
+
+## Optimizing Third-Party Scripts
+
+많은 앱이 다양한 유형의 기능을 포함하기 위해 써드 파티 자바스크립트를 사용한다. 그러나 써드 파티 코드를 포함하면 페이지 내용이 렌더링되지 않을 수 있으며 너무 일찍 로드되면 사용자 성능에 영향을 미칠 수 있다.
+
+Next.js는 모든 써드 파티 스크립트에 대한 로드를 최적화하는 내장 `Script` 컴포넌트를 제공한다. 이를 통해 스크립트의 가져오기 및 실행 시기를 결정할 수 있다.
+
+### Using the Script Component
+
+일반적인 HTML을 사용하면 `next/head`에 외부 스크립트를 추가해야 한다.
+
+```js
+import Head from 'next/head'
+
+function IndexPage() {
+  return (
+    <div>
+      <Head>
+        <script src="https://www.googletagmanager.com/gtag/js?id=123" />
+      </Head>
+    </div>
+  )
+}
+```
+
+`Script` 컴포넌트를 사용하면 `next/head` 없이 컴포넌트 어디에서든 외부 스크립트를 추가할 수 있다.
+
+```js
+import Script from 'next/script'
+
+function IndexPage() {
+  return (
+    <div>
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=123"
+      />
+    </div>
+  )
+}
+```
+
+`Script` 컴포넌트는 최적의 로드를 위해 스크립트를 가져오고 실행할 시기를 결정할 수 있는 `strategy` 프로퍼티를 도입했다. LCP에 부정적인 영향을 미치지 않기 위해 대부분의 써드 파티 스크립트는 페이지의 모든 콘텐츠가 로딩된 후, 페이지가 인터랙티브해진 직후(`strategy="afterInteractive"`) 이거나, 또는 레이지하게 브라우저 유휴 시간 동안(`strategy="lazyOnload"`)에 로드되도록 지연되어야 한다.
