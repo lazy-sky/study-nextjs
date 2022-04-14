@@ -102,3 +102,11 @@ function IndexPage() {
 ```
 
 `Script` 컴포넌트는 최적의 로드를 위해 스크립트를 가져오고 실행할 시기를 결정할 수 있는 `strategy` 프로퍼티를 도입했다. LCP에 부정적인 영향을 미치지 않기 위해 대부분의 써드 파티 스크립트는 페이지의 모든 콘텐츠가 로딩된 후, 페이지가 인터랙티브해진 직후(`strategy="afterInteractive"`) 이거나, 또는 레이지하게 브라우저 유휴 시간 동안(`strategy="lazyOnload"`)에 로드되도록 지연되어야 한다.
+
+# Monitoring your Core Web Vitals
+
+## Next.js Analytics
+
+[Next.js Analytics](https://nextjs.org/analytics)를 사용하면 Core Web Vitals를 사용하여 페이지의 성능을 분석하고 측정할 수 있다.
+
+Vercel 배포 환경에서 별도의 설정없이 Real Experience Score를 수집할 수 있다. 자체 호스팅하는 경우에도 분석이 지원된다.
