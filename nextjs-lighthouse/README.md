@@ -49,3 +49,7 @@ Next는 이러한 최적화를 즉시 처리할 수 있는 `Image` 컴포넌트�
 Next.js는 ES2020 동적 import를 지원한다. 이를 통해 JavaScript 모듈을 동적으로 가져올 수 있다. SSR로도 작동한다.
 
 동적 import를 사용하면 페이지 로드 시 사용하지 않는 JavaScript를 제거할 수 있다. 이는 또한 TTI(Time to Interactive)를 향상시켜 FID(First Input Delay)를 개선하는 데 도움이 된다.
+
+## Dynamic Imports for Components
+
+React 컴포넌트를 동적 imports를 사용하여 가져올 수도 있다. 이때 다른 React 컴포넌트와 동일하게 작동하도록 `next/dynamic`과 함께 사용해야 한다.
