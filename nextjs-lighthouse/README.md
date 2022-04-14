@@ -53,3 +53,9 @@ Next.js는 ES2020 동적 import를 지원한다. 이를 통해 JavaScript 모듈
 ## Dynamic Imports for Components
 
 React 컴포넌트를 동적 imports를 사용하여 가져올 수도 있다. 이때 다른 React 컴포넌트와 동일하게 작동하도록 `next/dynamic`과 함께 사용해야 한다.
+
+## Optimizing Fonts
+
+커스텀 폰트는 사이트의 브랜딩, 디자인 및 크로스 브라우저/디바이스 일관성을 위해 중요하다.
+
+Next.js에는 자동 웹 폰트 최적화가 내장되어 있다. 기본적으로 Next.js는 빌드 시 자동으로 폰트 CSS를 인라인화하여 폰트 선언을 가져오기 위한 추가 작업을 제거한다. 따라서 FCP(First Contentful Paint) 및 LCP(Large Contentful Paint)가 개선된다.
