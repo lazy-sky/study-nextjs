@@ -41,3 +41,11 @@ Next는 이러한 최적화를 즉시 처리할 수 있는 `Image` 컴포넌트�
 // After
 <Image src="/large-image.jpg" alt="Large Image" width={3048} height={2024} />
 ```
+
+## Dynamic Imports
+
+써드 파티 라이브러리에서 초기 페이지 로드 중에 로드되는 JavaScript의 양을 줄일 수 있다.
+
+Next.js는 ES2020 동적 import를 지원한다. 이를 통해 JavaScript 모듈을 동적으로 가져올 수 있다. SSR로도 작동한다.
+
+동적 import를 사용하면 페이지 로드 시 사용하지 않는 JavaScript를 제거할 수 있다. 이는 또한 TTI(Time to Interactive)를 향상시켜 FID(First Input Delay)를 개선하는 데 도움이 된다.
